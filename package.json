@@ -1,0 +1,15 @@
+{
+  "name": "u-rand",
+  "version": "0.0.0",
+  "description": "Functions for generating random stuff",
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/manvalls/u-rand.git"
+  },
+  "bugs": {
+    "url": "https://github.com/manvalls/u-rand/issues"
+  },
+  "author": "Manuel Valls Fernández <manolo@vlrz.es>",
+  "license": "LGPL-3.0"
+}
