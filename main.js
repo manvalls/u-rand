@@ -109,5 +109,12 @@ module.exports.unique = function(){
   return '_u_' + (++counter).toString(36) + module.exports.string(5);
 };
 
-if(global.Symbol) module.exports.Su = global.Symbol;
-else module.exports.Su = module.exports.unique;
+if(global.Symbol){
+  module.exports.Su = function(){ return Symbol(); };
+  module.exports.Su.define = function(obj,su,value){ obj[su] = value; };
+}else{
+  module.exports.Su = function(){ return module.exports.unique(); };
+  module.exports.Su.define = function(obj,su,value){
+    Object.defineProperty(obj,su,{value: value});
+  };
+}
