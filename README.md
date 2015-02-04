@@ -4,7 +4,7 @@
 
 ```javascript
 
-var rand = require('vz.rand');
+var rand = require('u-rand');
 
 rand(5);                  // Integer in the interval [0,5)
 rand(0,6);                // Integer in the interval [0,6)
