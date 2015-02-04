@@ -115,6 +115,10 @@ if(global.Symbol){
 }else{
   module.exports.Su = function(){ return module.exports.unique(); };
   module.exports.Su.define = function(obj,su,value){
-    Object.defineProperty(obj,su,{value: value});
+    Object.defineProperty(obj,su,{
+      value: value,
+      writable: true,
+      configurable: true
+    });
   };
 }
