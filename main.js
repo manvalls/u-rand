@@ -1,4 +1,4 @@
-
+var dref = 1425044468643;
 
 module.exports = function(n1,n2,decimals){
 	var num;
@@ -66,7 +66,8 @@ function getLetter(n){
 function getRandBase(b,n,max){
   var result,mod;
   
-  n = n || Math.floor(Math.random() * 1e15);
+  n = (n != null)?n:Math.floor(Math.random() * 1e15);
+  if(!n) return '0';
   
   if(b > 36){
     
@@ -94,18 +95,18 @@ module.exports.string = function(n,base,useDate){
   }
   
 	if(useDate){
-		str += getRandBase(base,Date.now());
+		str += getRandBase(base,Date.now() - dref);
 		str = str.substring(Math.max(str.length - n,0));
 	}
 	
-	while(str.length < n) str += getRandBase(base,false,n - str.length);
+	while(str.length < n) str += getRandBase(base,null,n - str.length);
 	
 	return str;
 };
 
-var counter = -1;
+var counter = 0;
 module.exports.unique = function(){
-  return '_u_' + (++counter).toString(36) + module.exports.string(5);
+  return getRandBase(62,counter++) + '-' + getRandBase(62,Date.now() - dref) + '-' + module.exports.string(5,62);
 };
 
 if(global.Symbol){
