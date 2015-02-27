@@ -1,5 +1,4 @@
 
-Number.MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991;
 
 module.exports = function(n1,n2,decimals){
 	var num;
@@ -67,7 +66,7 @@ function getLetter(n){
 function getRandBase(b,n,max){
   var result,mod;
   
-  n = n || Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
+  n = n || Math.floor(Math.random() * 1e15);
   
   if(b > 36){
     
