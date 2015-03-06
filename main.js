@@ -108,7 +108,7 @@ var counter = -1;
 module.exports.unique = function(){
   counter = (counter + 1)%1e15;
   
-  return getRandBase(62,counter + '-' + getRandBase(62,Date.now() - dref) + '-' + module.exports.string(5,62);
+  return getRandBase(62,counter) + '-' + getRandBase(62,Date.now() - dref) + '-' + module.exports.string(5,62);
 };
 
 if(global.Symbol){
