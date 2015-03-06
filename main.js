@@ -104,9 +104,11 @@ module.exports.string = function(n,base,useDate){
 	return str;
 };
 
-var counter = 0;
+var counter = -1;
 module.exports.unique = function(){
-  return getRandBase(62,counter++) + '-' + getRandBase(62,Date.now() - dref) + '-' + module.exports.string(5,62);
+  counter = (counter + 1)%1e15;
+  
+  return getRandBase(62,counter + '-' + getRandBase(62,Date.now() - dref) + '-' + module.exports.string(5,62);
 };
 
 if(global.Symbol){
