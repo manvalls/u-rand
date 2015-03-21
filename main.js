@@ -89,6 +89,8 @@ function getRandBase(b,n,max){
 module.exports.string = function(n,base,useDate){
 	var str = '';
 	
+  if(n == null) n = 10;
+  
   if(typeof base != 'number'){
     useDate = base;
     base = 36;
@@ -105,10 +107,10 @@ module.exports.string = function(n,base,useDate){
 };
 
 var counter = -1;
-module.exports.unique = function(){
+module.exports.unique = function(n){
   counter = (counter + 1)%1e15;
   
-  return getRandBase(62,counter) + '-' + getRandBase(62,Date.now() - dref) + '-' + module.exports.string(5,62);
+  return getRandBase(62,counter) + '-' + getRandBase(62,Date.now() - dref) + '-' + module.exports.string(n || 5,62);
 };
 
 if(global.Symbol){
