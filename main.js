@@ -113,16 +113,14 @@ module.exports.unique = function(n){
   return getRandBase(62,counter) + '-' + getRandBase(62,Date.now() - dref) + '-' + module.exports.string(n || 5,62);
 };
 
-if(global.Symbol){
-  module.exports.Su = function(){ return Symbol(); };
-  module.exports.Su.define = function(obj,su,value){ obj[su] = value; };
-}else{
-  module.exports.Su = function(){ return module.exports.unique(); };
-  module.exports.Su.define = function(obj,su,value){
-    Object.defineProperty(obj,su,{
-      value: value,
-      writable: true,
-      configurable: true
-    });
-  };
-}
+if(global.Symbol) module.exports.Su = function(){ return Symbol(); };
+else module.exports.Su = function(){ return module.exports.unique(); };
+
+module.exports.Su.define = function(obj,su,value){
+  Object.defineProperty(obj,su,{
+    value: value,
+    writable: true,
+    configurable: true
+  });
+};
+
