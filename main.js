@@ -1,4 +1,7 @@
-var dref = 1425044468643;
+var dref = 1425044468643,
+    counter = -1,
+    alphabet = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-+,.<>=!#@?/&%$*:;"\'()[]\\^`{}|~',
+    seed,inc;
 
 module.exports = function(n1,n2,decimals){
 	var num;
@@ -23,46 +26,6 @@ module.exports = function(n1,n2,decimals){
 	return num;
 }
 
-function getLetter(n){
-  if(n < 36) return n.toString(36);
-  if(n < 62) return (n - 26).toString(36).toUpperCase();
-  
-  switch(n){
-    case 62: return '_';
-    case 63: return '-';
-    case 64: return '+';
-    case 65: return ',';
-    case 66: return '.';
-    case 67: return '<';
-    case 68: return '>';
-    case 69: return '=';
-    case 70: return '!';
-    case 71: return '#';
-    case 72: return '@';
-    case 73: return '?';
-    case 74: return '/';
-    case 75: return '&';
-    case 76: return '%';
-    case 77: return '$';
-    case 78: return '*';
-    case 79: return ':';
-    case 80: return ';';
-    case 81: return '"';
-    case 82: return "'";
-    case 83: return '(';
-    case 84: return ')';
-    case 85: return '[';
-    case 86: return ']';
-    case 87: return '\\';
-    case 88: return '^';
-    case 89: return '`';
-    case 90: return '{';
-    case 91: return '}';
-    case 92: return '|';
-    case 93: return '~';
-  }
-}
-
 function getRandBase(b,n,max){
   var result,mod;
   
@@ -75,7 +38,7 @@ function getRandBase(b,n,max){
     while(n > 0){
       mod = n % b;
       n = Math.floor(n / b);
-      result = getLetter(mod) + result;
+      result = alphabet[mod % alphabet.length] + result;
       if(result.length == max) return result;
     }
     
@@ -93,7 +56,7 @@ module.exports.string = function(n,base,useDate){
   
   if(typeof base != 'number'){
     useDate = base;
-    base = 36;
+    base = 62;
   }
   
 	if(useDate){
@@ -106,10 +69,29 @@ module.exports.string = function(n,base,useDate){
 	return str;
 };
 
-var counter = -1;
 module.exports.unique = function(n){
   counter = (counter + 1)%1e15;
   
   return getRandBase(62,counter) + '-' + getRandBase(62,Date.now() - dref) + '-' + module.exports.string(n || 5,62);
+};
+
+seed = module.exports.unique();
+inc = module.exports.unique();
+
+module.exports.generator = function(s){
+  var ret = {};
+  
+  ret[seed] = Math.abs(typeof s == 'number' ? s : Date.now());
+  ret[inc] = ((ret[seed] + 1) * 2 + ret[seed]) % 1e3;
+  ret.next = next;
+  
+  return ret;
+};
+
+function next(){
+  var x;
+  
+  x = Math.sin(this[seed] = (this[seed] + this[inc])%1e15) * 1e6;
+  return {value: x - Math.floor(x)};
 };
 
