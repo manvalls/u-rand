@@ -1,11 +1,12 @@
-var dref = 1425044468643,
-    counter = -1,
+var counter = -1,
     alphabet = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-+,.<>=!#@?/&%$*:;"\'()[]\\^`{}|~',
-    seed,inc;
+
+    seed = Symbol(),
+    inc = Symbol();
 
 module.exports = function(n1,n2,decimals){
 	var num;
-  
+
 	if(n2 == undefined){
 		if(n1 > 0){
 			n2 = n1;
@@ -18,22 +19,21 @@ module.exports = function(n1,n2,decimals){
 			n1 = 0;
 		}else n2 = 0;
 	}
-	
+
 	num = n1 + Math.random() * (n2 - n1);
-	
 	if(!decimals) num = Math.floor(num);
-	
+
 	return num;
 }
 
 function getRandBase(b,n,max){
   var result,mod;
-  
+
   n = (n != null)?n:Math.floor(Math.random() * 1e15);
   if(!n) return '0';
-  
+
   if(b > 36){
-    
+
     result = '';
     while(n > 0){
       mod = n % b;
@@ -41,57 +41,51 @@ function getRandBase(b,n,max){
       result = alphabet[mod % alphabet.length] + result;
       if(result.length == max) return result;
     }
-    
+
   }else result = n.toString(b);
-  
+
   if(max) return result.substring(0,max)
-  
   return result;
 }
 
 module.exports.string = function(n,base,useDate){
 	var str = '';
-	
+
   if(n == null) n = 10;
-  
+
   if(typeof base != 'number'){
     useDate = base;
     base = 62;
   }
-  
+
 	if(useDate){
-		str += getRandBase(base,Date.now() - dref);
+		str += getRandBase(base,Date.now(),5);
 		str = str.substring(Math.max(str.length - n,0));
 	}
-	
+
 	while(str.length < n) str += getRandBase(base,null,n - str.length);
-	
 	return str;
 };
 
 module.exports.unique = function(n){
   counter = (counter + 1)%1e15;
-  
-  return getRandBase(62,counter) + '-' + getRandBase(62,Date.now() - dref) + '-' + module.exports.string(n || 5,62);
-};
 
-seed = module.exports.unique();
-inc = module.exports.unique();
+  return getRandBase(62,counter) + '-' + getRandBase(62,Date.now(),5) + '-' + module.exports.string(n || 5,62);
+};
 
 module.exports.generator = function(s){
   var ret = {};
-  
+
   ret[seed] = Math.abs(typeof s == 'number' ? s : Date.now());
   ret[inc] = ((ret[seed] + 1) * 2 + ret[seed]) % 1e3;
   ret.next = next;
-  
+
   return ret;
 };
 
 function next(){
   var x;
-  
+
   x = Math.sin(this[seed] = (this[seed] + this[inc])%1e15) * 1e6;
   return {value: x - Math.floor(x)};
 };
-
