@@ -26,12 +26,10 @@ module.exports = function(n1,n2,decimals){
 	return num;
 }
 
-function getRandBase(b,n,max){
+function getNumBase(b,n){
   var result,mod;
 
-  n = (n != null)?n:Math.floor(Math.random() * 1e15);
   if(!n) return '0';
-
   if(b > 36){
 
     result = '';
@@ -39,12 +37,10 @@ function getRandBase(b,n,max){
       mod = n % b;
       n = Math.floor(n / b);
       result = alphabet[mod % alphabet.length] + result;
-      if(result.length == max) return result;
     }
 
   }else result = n.toString(b);
 
-  if(max) return result.substring(0,max)
   return result;
 }
 
@@ -63,14 +59,14 @@ module.exports.string = function(n,base,useDate){
 		str = str.substring(Math.max(str.length - n,0));
 	}
 
-	while(str.length < n) str += getRandBase(base,null,n - str.length);
+	while(str.length < n) str += alphabet[Math.floor(Math.random() * base) % alphabet.length];
 	return str;
 };
 
 module.exports.unique = function(n){
   counter = (counter + 1)%1e15;
 
-  return getRandBase(62,counter) + '-' + getRandBase(62,Date.now(),5) + '-' + module.exports.string(n || 5,62);
+  return getNumBase(62,counter) + '-' + getNumBase(62,Date.now(),5) + '-' + module.exports.string(n || 5,62);
 };
 
 module.exports.generator = function(s){
