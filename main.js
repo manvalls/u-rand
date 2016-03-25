@@ -66,7 +66,7 @@ module.exports.string = function(n,base,useDate){
 module.exports.unique = function(n){
   counter = (counter + 1)%1e15;
 
-  return getNumBase(62,counter) + '-' + getNumBase(62,Date.now(),5) + '-' + module.exports.string(n || 5,62);
+  return 'u' + getNumBase(62,counter) + '-' + getNumBase(62,Date.now(),5) + '-' + module.exports.string(n || 5,62);
 };
 
 module.exports.generator = function(s){
